@@ -1,4 +1,4 @@
-public class Member {
+public class Member implements MemberBehaviour{
 
     private String secuence;
     private int fitness;
@@ -34,5 +34,10 @@ public class Member {
                 "secuence='" + secuence + '\'' +
                 ", fitness=" + fitness +
                 '}';
+    }
+
+    @Override()
+    public void geneMutation() {
+
     }
 }

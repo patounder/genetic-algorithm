@@ -6,6 +6,7 @@ public class PopulationManager {
 
 
     public static final int NUMBER_ATTEMPTS = 30;
+    public static final int MOTHER_INDEX = 0;
 
     public List<Member> makePopulation(int populationQuantity, String referenceSequence) {
 
@@ -77,7 +78,7 @@ public class PopulationManager {
 
         Member best = null;
         for(int i = 0; i <= NUMBER_ATTEMPTS; i++){
-            Member member = population.get(getIntRandomRange(population.size() - 1, 0));
+            Member member = population.get(getRandomIntFromRange(population.size() - 1, 0));
 
             if(null == best || member.getFitness() > best.getFitness()){
                 best = member;
@@ -87,11 +88,54 @@ public class PopulationManager {
     }
 
 
-    private int getIntRandomRange(int from, int to){
+    private int getRandomIntFromRange(int from, int to){
         return (int) (Math.random()*((to - from) + 1)) + from;
     }
 
-    public List<Member> reproduction(List<Member> parents){
-        return null;
+    public List<Member> reproduction(List<Member> parents, int populationQuantity){
+
+        List<Member> childList = new ArrayList<>(populationQuantity);
+
+        while(childList.size() < populationQuantity){
+
+            Member mother = parents.get(getRandomIntFromRange(0, parents.size() - 1));
+            Member father = parents.get(getRandomIntFromRange(0, parents.size() - 1));
+            Member child = makeChild(mother, father);
+
+            child.geneMutation();//TODO finish implementation
+            childList.add(child);
+        }
+
+        return childList;
+    }
+
+
+    private Member makeChild(Member mother, Member father){
+
+        char[] motherGenes = mother.getSecuence().toCharArray();
+        char[] fatherGenes = father.getSecuence().toCharArray();
+
+        if(motherGenes.length != fatherGenes.length){
+            System.out.println("mother's genes and father's genes are not same length");
+            return null;
+        }
+
+        char[] childGenes = new char[motherGenes.length];
+        for(int i = 0 ; i < motherGenes.length; i++){
+            char createdGene = selectGeneBetweenMotherAndFather(motherGenes[i], fatherGenes[i]);
+            childGenes[i] = createdGene;
+        }
+
+        String sequence = childGenes.toString();
+        return new Member(sequence,0);
+    }
+
+    private char selectGeneBetweenMotherAndFather(char motherGene, char fatherGene){
+        int selectedParentIndex = getRandomIntFromRange(0, 1);
+
+        if(selectedParentIndex == MOTHER_INDEX){
+            return motherGene;
+        }
+        return fatherGene;
     }
 }
