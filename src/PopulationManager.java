@@ -88,11 +88,11 @@ public class PopulationManager {
     }
 
 
-    private int getRandomIntFromRange(int from, int to){
+    public static int getRandomIntFromRange(int from, int to){
         return (int) (Math.random()*((to - from) + 1)) + from;
     }
 
-    public List<Member> reproduction(List<Member> parents, int populationQuantity){
+    public List<Member> reproduction(List<Member> parents, int populationQuantity, double mutationRate){
 
         List<Member> childList = new ArrayList<>(populationQuantity);
 
@@ -102,7 +102,7 @@ public class PopulationManager {
             Member father = parents.get(getRandomIntFromRange(0, parents.size() - 1));
             Member child = makeChild(mother, father);
 
-            child.geneMutation();//TODO finish implementation
+            child.mutation(mutationRate);
             childList.add(child);
         }
 
@@ -112,11 +112,11 @@ public class PopulationManager {
 
     private Member makeChild(Member mother, Member father){
 
-        char[] motherGenes = mother.getSecuence().toCharArray();
-        char[] fatherGenes = father.getSecuence().toCharArray();
+        char[] motherGenes = mother.getSequence().toCharArray();
+        char[] fatherGenes = father.getSequence().toCharArray();
 
         if(motherGenes.length != fatherGenes.length){
-            System.out.println("mother's genes and father's genes are not same length");
+            System.out.println("mother's genes and father's genes has not same length");
             return null;
         }
 
@@ -126,7 +126,7 @@ public class PopulationManager {
             childGenes[i] = createdGene;
         }
 
-        String sequence = childGenes.toString();
+        String sequence = new String(childGenes);
         return new Member(sequence,0);
     }
 

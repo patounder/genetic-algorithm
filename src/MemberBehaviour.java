@@ -1,3 +1,3 @@
 public interface MemberBehaviour {
-    void geneMutation();
+    void mutation(double mutationRate);
 }
