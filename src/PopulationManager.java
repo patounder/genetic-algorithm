@@ -48,6 +48,13 @@ public class PopulationManager {
         return finalSequence;
     }
 
+    public void setFitnessPopulation(List<Member> population, String referenceSequence){
+
+        for(Member member : population){
+            member.setFitness(setFitness(referenceSequence,member.getSequence()));
+        }
+    }
+
     public int setFitness(String referenceSequence, String sequenceToEvaluate) {
         int fitness = 0;
 
