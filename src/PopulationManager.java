@@ -7,21 +7,27 @@ public class PopulationManager {
 
     public static final int NUMBER_ATTEMPTS = 30;
     public static final int MOTHER_INDEX = 0;
+    public static final int MAX_FITNESS = 5;
 
-    public List<Member> makePopulation(int populationSize, String referenceSequence) {
+    public Population makePopulation(int populationSize, String referenceSequence) {
 
         List<String> sequenceList = makeSequenceList(populationSize, referenceSequence.length());
         List<Member> population = new ArrayList<>(populationSize);
         Member auxMember;
-        int fitness = 0;
-
+        int fitness;
+        int quantityBestMembers = 0;
         for (int i = 0; i < sequenceList.size(); i++) {
             fitness = calcMemberFitness(sequenceList.get(i), referenceSequence);
+
+            if(fitness == 5){
+                quantityBestMembers = quantityBestMembers + 1;
+            }
+
             auxMember = new Member(sequenceList.get(i), fitness);
             population.add(auxMember);
         }
 
-        return population;
+        return new Population(population,quantityBestMembers);
     }
 
     public List<String> makeSequenceList(int populationSize, int memberLength) {
@@ -48,11 +54,19 @@ public class PopulationManager {
         return finalSequence;
     }
 
-    public void calcPopulationFitness(List<Member> population, String referenceSequence){
+    public void calcPopulationFitness(Population population, String referenceSequence){
 
-        for(Member member : population){
+        int quantityBestMembers = 0;
+
+        for(Member member : population.getPopulationList()){
             member.setFitness(calcMemberFitness(referenceSequence,member.getSequence()));
+
+            if(member.getFitness() == MAX_FITNESS){
+                quantityBestMembers = quantityBestMembers + 1;
+            }
         }
+
+        population.setQuantityBestMembers(quantityBestMembers);
     }
 
     public int calcMemberFitness(String referenceSequence, String sequenceToEvaluate) {
@@ -99,7 +113,7 @@ public class PopulationManager {
         return (int) (Math.random()*((to - from) + 1)) + from;
     }
 
-    public List<Member> reproduction(List<Member> parents, int populationQuantity, double mutationRate){
+    public Population reproduction(List<Member> parents, int populationQuantity, double mutationRate){
 
         List<Member> childList = new ArrayList<>(populationQuantity);
 
@@ -110,10 +124,11 @@ public class PopulationManager {
             Member child = makeChild(mother, father);
 
             child.mutation(mutationRate);
+
             childList.add(child);
         }
 
-        return childList;
+        return new Population(childList, 0);
     }
 
 
@@ -145,4 +160,5 @@ public class PopulationManager {
         }
         return fatherGene;
     }
+
 }
