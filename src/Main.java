@@ -13,5 +13,7 @@ public class Main {
         List<Member> parents = populationManager.getPopulationParents(populationList, QUANTITY_PARENTS);
         List<Member> newPopulation = populationManager.reproduction(parents, POPULATION_SIZE, MUTATION_RATE);
         populationManager.calcPopulationFitness(newPopulation, REFERENCE_SEQUENCE);
+        //TODO how define metrics for number of generations until solution foun
+        //TODO total time
     }
 }
