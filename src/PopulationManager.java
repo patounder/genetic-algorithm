@@ -8,10 +8,10 @@ public class PopulationManager {
     public static final int NUMBER_ATTEMPTS = 30;
     public static final int MOTHER_INDEX = 0;
 
-    public List<Member> makePopulation(int populationQuantity, String referenceSequence) {
+    public List<Member> makePopulation(int populationSize, String referenceSequence) {
 
-        List<String> sequenceList = initializePopulation(populationQuantity, referenceSequence.length());
-        List<Member> population = new ArrayList<>(populationQuantity);
+        List<String> sequenceList = initializePopulation(populationSize, referenceSequence.length());
+        List<Member> population = new ArrayList<>(populationSize);
         Member auxMember;
         int fitness = 0;
 
@@ -24,11 +24,11 @@ public class PopulationManager {
         return population;
     }
 
-    public List<String> initializePopulation(int populationQuantity, int memberLength) {
+    public List<String> initializePopulation(int populationSize, int memberLength) {
 
-        List<String> population = new ArrayList<>(populationQuantity);
+        List<String> population = new ArrayList<>(populationSize);
 
-        for (int index = 0; index < populationQuantity; index++) {
+        for (int index = 0; index < populationSize; index++) {
             int randomNum = ThreadLocalRandom.current().nextInt(0, 31 + 1);
             String randomNumLikeString = Integer.toBinaryString(randomNum);
             String finalSequence = normalizeSequence(randomNumLikeString, memberLength);
