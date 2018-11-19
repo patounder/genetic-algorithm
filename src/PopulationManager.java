@@ -10,13 +10,13 @@ public class PopulationManager {
 
     public List<Member> makePopulation(int populationSize, String referenceSequence) {
 
-        List<String> sequenceList = initializePopulation(populationSize, referenceSequence.length());
+        List<String> sequenceList = makeSequenceList(populationSize, referenceSequence.length());
         List<Member> population = new ArrayList<>(populationSize);
         Member auxMember;
         int fitness = 0;
 
         for (int i = 0; i < sequenceList.size(); i++) {
-            fitness = setFitness(sequenceList.get(i), referenceSequence);
+            fitness = calcMemberFitness(sequenceList.get(i), referenceSequence);
             auxMember = new Member(sequenceList.get(i), fitness);
             population.add(auxMember);
         }
@@ -24,7 +24,7 @@ public class PopulationManager {
         return population;
     }
 
-    public List<String> initializePopulation(int populationSize, int memberLength) {
+    public List<String> makeSequenceList(int populationSize, int memberLength) {
 
         List<String> population = new ArrayList<>(populationSize);
 
@@ -48,14 +48,14 @@ public class PopulationManager {
         return finalSequence;
     }
 
-    public void setFitnessPopulation(List<Member> population, String referenceSequence){
+    public void calcPopulationFitness(List<Member> population, String referenceSequence){
 
         for(Member member : population){
-            member.setFitness(setFitness(referenceSequence,member.getSequence()));
+            member.setFitness(calcMemberFitness(referenceSequence,member.getSequence()));
         }
     }
 
-    public int setFitness(String referenceSequence, String sequenceToEvaluate) {
+    public int calcMemberFitness(String referenceSequence, String sequenceToEvaluate) {
         int fitness = 0;
 
         char[] referenceSequenceArray = referenceSequence.toCharArray();

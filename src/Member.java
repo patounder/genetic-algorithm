@@ -2,6 +2,7 @@ public class Member implements MemberBehaviour{
 
     public static final char ZERO_VALUE_GENE = '0';
     public static final char ONE_VALUE_GENE = '1';
+    public static final int SEQUENCE_SIZE = 5;
     private String sequence;
     private int fitness;
 
@@ -38,9 +39,10 @@ public class Member implements MemberBehaviour{
                 '}';
     }
 
-    @Override()
+    @Override
     public void mutation(double mutationRate) {
-        int genesQuantityToMutate = (int) (5 * mutationRate);
+
+        int genesQuantityToMutate = (int) (SEQUENCE_SIZE * mutationRate);
         char[] sequenceArray = this.sequence.toCharArray();
         for(int i = 0; i < genesQuantityToMutate; i++){
             int indexSequenceToMutate = PopulationManager.getRandomIntFromRange(0, 4);

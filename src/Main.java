@@ -12,6 +12,6 @@ public class Main {
         List<Member> populationList = populationManager.makePopulation(POPULATION_SIZE, REFERENCE_SEQUENCE);
         List<Member> parents = populationManager.getPopulationParents(populationList, QUANTITY_PARENTS);
         List<Member> newPopulation = populationManager.reproduction(parents, POPULATION_SIZE, MUTATION_RATE);
-        populationManager.setFitnessPopulation(newPopulation, REFERENCE_SEQUENCE);
+        populationManager.calcPopulationFitness(newPopulation, REFERENCE_SEQUENCE);
     }
 }
