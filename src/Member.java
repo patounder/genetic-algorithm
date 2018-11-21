@@ -3,7 +3,7 @@ public class Member implements MemberBehaviour{
     public static final char ZERO_VALUE_GENE = '0';
     public static final char ONE_VALUE_GENE = '1';
     public static final int SEQUENCE_SIZE = 5;
-    private String sequence;
+    private String sequence; //TODO change name to generic value o purpose
     private int fitness;
 
     public Member() {
