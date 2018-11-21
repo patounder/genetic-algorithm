@@ -1,6 +1,8 @@
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.stream.Collectors;
 
 public class PopulationManager {
 
@@ -12,22 +14,18 @@ public class PopulationManager {
     public Population makePopulation(int populationSize, String referenceSequence) {
 
         List<String> sequenceList = makeSequenceList(populationSize, referenceSequence.length());
-        List<Member> population = new ArrayList<>(populationSize);
-        Member auxMember;
-        int fitness;
-        int quantityBestMembers = 0;
-        for (int i = 0; i < sequenceList.size(); i++) {
-            fitness = calcMemberFitness(sequenceList.get(i), referenceSequence);
+
+        AtomicInteger quantityBestMembers = new AtomicInteger();
+        List<Member> populationList = sequenceList.stream().map(sequence -> {
+            int fitness = calcMemberFitness(sequence, referenceSequence);
 
             if(fitness == 5){
-                quantityBestMembers = quantityBestMembers + 1;
+                quantityBestMembers.set(quantityBestMembers.get() + 1);
             }
+            return new Member(sequence, fitness);
+        }).collect(Collectors.toList());
 
-            auxMember = new Member(sequenceList.get(i), fitness);
-            population.add(auxMember);
-        }
-
-        return new Population(population,quantityBestMembers);
+        return new Population(populationList, quantityBestMembers.get());
     }
 
     public List<String> makeSequenceList(int populationSize, int memberLength) {
