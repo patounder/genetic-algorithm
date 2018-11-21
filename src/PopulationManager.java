@@ -2,6 +2,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.Collectors;
 
 public class PopulationManager {
@@ -10,22 +11,22 @@ public class PopulationManager {
     public static final int NUMBER_ATTEMPTS = 30;
     public static final int MOTHER_INDEX = 0;
     public static final int MAX_FITNESS = 5;
+    public static final int INITIAL_FITNESS = 0;
 
     public Population makePopulation(int populationSize, String referenceSequence) {
 
         List<String> sequenceList = makeSequenceList(populationSize, referenceSequence.length());
 
-        AtomicInteger quantityBestMembers = new AtomicInteger();
+        AtomicReference<AtomicInteger> quantityBestMembers = new AtomicReference<>(new AtomicInteger());
         List<Member> populationList = sequenceList.stream().map(sequence -> {
             int fitness = calcMemberFitness(sequence, referenceSequence);
 
-            if(fitness == 5){
-                quantityBestMembers.set(quantityBestMembers.get() + 1);
-            }
+            quantityBestMembers.set(updateBestMembersQuantity(quantityBestMembers.get(), fitness));
+
             return new Member(sequence, fitness);
         }).collect(Collectors.toList());
 
-        return new Population(populationList, quantityBestMembers.get());
+        return new Population(populationList, quantityBestMembers.get().get());
     }
 
     public List<String> makeSequenceList(int populationSize, int memberLength) {
@@ -52,21 +53,6 @@ public class PopulationManager {
         return finalSequence;
     }
 
-    public void calcPopulationFitness(Population population, String referenceSequence){
-
-        int quantityBestMembers = 0;
-
-        for(Member member : population.getPopulationList()){
-            member.setFitness(calcMemberFitness(referenceSequence,member.getSequence()));
-
-            if(member.getFitness() == MAX_FITNESS){
-                quantityBestMembers = quantityBestMembers + 1;
-            }
-        }
-
-        population.setQuantityBestMembers(quantityBestMembers);
-    }
-
     public int calcMemberFitness(String referenceSequence, String sequenceToEvaluate) {
         int fitness = 0;
 
@@ -81,7 +67,7 @@ public class PopulationManager {
         return fitness;
     }
 
-    public List<Member> getPopulationParents(List<Member> population, int quantityParents){
+    public List<Member> getParentsMemberList(List<Member> population, int quantityParents){
 
         List<Member> selectedParentList = new ArrayList<>(quantityParents);
 
@@ -111,28 +97,32 @@ public class PopulationManager {
         return (int) (Math.random()*((to - from) + 1)) + from;
     }
 
-    public Population reproduction(List<Member> parents, int populationQuantity, double mutationRate){
+    public Population reproduction(List<Member> parents, int populationQuantity, double mutationRate, String referenceSequence){
 
         List<Member> childList = new ArrayList<>(populationQuantity);
 
+        AtomicReference<AtomicInteger> quantityBestMembers = new AtomicReference<>(new AtomicInteger());
+
         while(childList.size() < populationQuantity){
-
-            Member mother = parents.get(getRandomIntFromRange(0, parents.size() - 1));
-            Member father = parents.get(getRandomIntFromRange(0, parents.size() - 1));
+            int motherRandomIndex = getRandomIntFromRange(0, parents.size() - 1);
+            Member mother = parents.get(motherRandomIndex);
+            int fatherRandomIndex = getRandomIntFromRange(0, parents.size() - 1); //TODO possible error to select the gen like mother and father to same time
+            Member father = parents.get(fatherRandomIndex);
             Member child = makeChild(mother, father);
-
             child.mutation(mutationRate);
-
+            child.setFitness(calcMemberFitness(child.getSequence(), referenceSequence));
             childList.add(child);
+
+            quantityBestMembers.set(updateBestMembersQuantity(quantityBestMembers.get(), child.getFitness()));
         }
 
-        return new Population(childList, 0);
+        return new Population(childList, quantityBestMembers.get().get());
     }
 
 
     private Member makeChild(Member mother, Member father){
 
-        char[] motherGenes = mother.getSequence().toCharArray();
+        char[] motherGenes = mother.getSequence().toCharArray();//TODO analyze option for strings like generic object
         char[] fatherGenes = father.getSequence().toCharArray();
 
         if(motherGenes.length != fatherGenes.length){
@@ -146,8 +136,8 @@ public class PopulationManager {
             childGenes[i] = createdGene;
         }
 
-        String sequence = new String(childGenes);
-        return new Member(sequence,0);
+        String childSequence = new String(childGenes);
+        return new Member(childSequence, INITIAL_FITNESS);
     }
 
     private char selectGeneBetweenMotherAndFather(char motherGene, char fatherGene){
@@ -159,4 +149,12 @@ public class PopulationManager {
         return fatherGene;
     }
 
+    private AtomicInteger updateBestMembersQuantity(AtomicInteger bestMembersQuantity, int fitnessMember){
+
+        if(fitnessMember == MAX_FITNESS){ //TODO parametrizar criterio de mejores miembros
+            return new AtomicInteger(bestMembersQuantity.get() + 1);
+        }
+
+        return bestMembersQuantity;
+    }
 }

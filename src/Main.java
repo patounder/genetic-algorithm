@@ -17,8 +17,7 @@ public class Main {
 
             Population population = populationManager.makePopulation(POPULATION_SIZE, REFERENCE_SEQUENCE); //TODO change reference 'sequence' to generic reference
             List<Member> parents = populationManager.getParentsMemberList(population.getPopulationList(), QUANTITY_PARENTS);
-            Population newPopulation = populationManager.reproduction(parents, POPULATION_SIZE, MUTATION_RATE);
-            populationManager.calcPopulationFitness(newPopulation, REFERENCE_SEQUENCE);
+            Population newPopulation = populationManager.reproduction(parents, POPULATION_SIZE, MUTATION_RATE, REFERENCE_SEQUENCE);
 
             if((bestPopulation == null) || bestPopulation.getQuantityBestMembers() < newPopulation.getQuantityBestMembers()){
                 bestPopulation = newPopulation;
