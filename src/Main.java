@@ -1,9 +1,10 @@
+import java.util.ArrayList;
 import java.util.List;
 
 public class Main {
 
-    public static final int POPULATION_SIZE = 1000;
-    public static final int QUANTITY_PARENTS = 500;
+    public static final int POPULATION_SIZE = 10;
+    public static final int QUANTITY_PARENTS = 5;
     public static final String REFERENCE_SEQUENCE = "10010";
     public static final double MUTATION_RATE = 0.2;
 
@@ -11,6 +12,7 @@ public class Main {
         PopulationManager populationManager = new PopulationManager();
         Population bestPopulation = null;
 
+        List<Population> resumeTotalPopulation = new ArrayList<>();
 
         long timeInit = System.currentTimeMillis();
         for(int i = 1; i <= 100; i++){
@@ -22,10 +24,10 @@ public class Main {
             if((bestPopulation == null) || bestPopulation.getQuantityBestMembers() < newPopulation.getQuantityBestMembers()){
                 bestPopulation = newPopulation;
             }
-
+            System.out.println("index population="+i+" best members="+ newPopulation.getQuantityBestMembers());
         }
         long duration = System.currentTimeMillis() - timeInit;
-        System.out.printf("Total population =%d, best members=%d, time=%d", POPULATION_SIZE,bestPopulation.getQuantityBestMembers(), duration);
+        System.out.printf("Best population. Total population=%d, best members=%d, time=%d", POPULATION_SIZE,bestPopulation.getQuantityBestMembers(), duration);
 
     }
 }

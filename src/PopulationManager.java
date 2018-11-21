@@ -15,7 +15,7 @@ public class PopulationManager {
 
     public Population makePopulation(int populationSize, String referenceSequence) {
 
-        List<String> sequenceList = makeSequenceList(populationSize, referenceSequence.length());
+        List<String> sequenceList = makeGenesSequenceList(populationSize, referenceSequence.length());
 
         AtomicReference<AtomicInteger> quantityBestMembers = new AtomicReference<>(new AtomicInteger());
         List<Member> populationList = sequenceList.stream().map(sequence -> {
@@ -29,14 +29,17 @@ public class PopulationManager {
         return new Population(populationList, quantityBestMembers.get().get());
     }
 
-    public List<String> makeSequenceList(int populationSize, int memberLength) {
+    public List<String> makeGenesSequenceList(int populationSize, int memberLength) {
 
         List<String> population = new ArrayList<>(populationSize);
 
         for (int index = 0; index < populationSize; index++) {
-            int randomNum = ThreadLocalRandom.current().nextInt(0, 31 + 1);
+
+            int randomNum = ThreadLocalRandom.current().nextInt(0, 31 + 1); //TODO abstract random gen
             String randomNumLikeString = Integer.toBinaryString(randomNum);
             String finalSequence = normalizeSequence(randomNumLikeString, memberLength);
+
+
             population.add(index, finalSequence);
         }
 
