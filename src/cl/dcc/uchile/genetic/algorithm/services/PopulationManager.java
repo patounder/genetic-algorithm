@@ -1,3 +1,5 @@
+package cl.dcc.uchile.genetic.algorithm.services;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;

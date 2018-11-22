@@ -1,3 +1,6 @@
+package cl.dcc.uchile.genetic.algorithm.services.plot;
+
+import cl.dcc.uchile.genetic.algorithm.services.Population;
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;

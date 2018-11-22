@@ -1,3 +1,8 @@
+import cl.dcc.uchile.genetic.algorithm.services.Member;
+import cl.dcc.uchile.genetic.algorithm.services.Population;
+import cl.dcc.uchile.genetic.algorithm.services.PopulationManager;
+import cl.dcc.uchile.genetic.algorithm.services.plot.ChartBuilder;
+
 import java.util.ArrayList;
 import java.util.List;
 

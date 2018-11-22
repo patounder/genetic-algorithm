@@ -1,4 +1,6 @@
-public class Member implements MemberBehaviour{
+package cl.dcc.uchile.genetic.algorithm.services;
+
+public class Member implements MemberBehaviour {
 
     public static final char ZERO_VALUE_GENE = '0';
     public static final char ONE_VALUE_GENE = '1';
@@ -33,7 +35,7 @@ public class Member implements MemberBehaviour{
 
     @Override
     public String toString() {
-        return "Member{" +
+        return "cl.dcc.uchile.genetic.algorithm.services.Member{" +
                 "sequence='" + sequence + '\'' +
                 ", fitness=" + fitness +
                 '}';

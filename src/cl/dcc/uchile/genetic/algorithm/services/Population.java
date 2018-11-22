@@ -1,3 +1,5 @@
+package cl.dcc.uchile.genetic.algorithm.services;
+
 import java.util.List;
 
 public class Population {
@@ -32,7 +34,7 @@ public class Population {
 
     @Override
     public String toString() {
-        return "Population{" +
+        return "cl.dcc.uchile.genetic.algorithm.services.Population{" +
                 "populationList=" + populationList +
                 ", quantityBestMembers=" + quantityBestMembers +
                 '}';
