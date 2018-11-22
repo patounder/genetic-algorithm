@@ -2,7 +2,6 @@ package cl.dcc.uchile.genetic.algorithm.services;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.ThreadLocalRandom;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.Collectors;
@@ -31,18 +30,19 @@ public class PopulationManager {
         return new Population(populationList, quantityBestMembers.get().get());
     }
 
-    public List<String> makeGenesSequenceList(int populationSize, int memberLength) {
+    public List<String> makeGenesSequenceList(int populationSize, int referenceSequenceLength) {
 
         List<String> population = new ArrayList<>(populationSize);
 
         for (int index = 0; index < populationSize; index++) {
 
-            int randomNum = ThreadLocalRandom.current().nextInt(0, 31 + 1); //TODO abstract random gen
+
+            /*int randomNum = ThreadLocalRandom.current().nextInt(0, 31 + 1); //TODO abstract random gen
             String randomNumLikeString = Integer.toBinaryString(randomNum);
-            String finalSequence = normalizeSequence(randomNumLikeString, memberLength);
+            String finalSequence = normalizeSequence(randomNumLikeString, referenceSequenceLength);*/
 
-
-            population.add(index, finalSequence);
+            String randomGeneratedSequence = generateRandomWordSequence(referenceSequenceLength);
+            population.add(index, randomGeneratedSequence);
         }
 
         return population;
@@ -162,4 +162,11 @@ public class PopulationManager {
 
         return bestMembersQuantity;
     }
+
+    //TODO this method must be abstract for all implementations or solutions using genetics algorithms
+    private String generateRandomWordSequence(int maxLength){
+        //TODO implement random word
+        return null;
+    }
+
 }

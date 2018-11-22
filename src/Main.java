@@ -10,7 +10,7 @@ public class Main {
 
     public static final int POPULATION_SIZE = 1000;
     public static final int QUANTITY_PARENTS = 500;
-    public static final String REFERENCE_SEQUENCE = "10010";
+    public static final String REFERENCE_SEQUENCE = "hola";
     public static final double MUTATION_RATE = 0.2;
 
     public static void main(String[] args) {
