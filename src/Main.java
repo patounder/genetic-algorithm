@@ -24,10 +24,15 @@ public class Main {
             if((bestPopulation == null) || bestPopulation.getQuantityBestMembers() < newPopulation.getQuantityBestMembers()){
                 bestPopulation = newPopulation;
             }
+
+            resumeTotalPopulation.add(newPopulation);
             System.out.println("index population="+i+" best members="+ newPopulation.getQuantityBestMembers());
         }
         long duration = System.currentTimeMillis() - timeInit;
         System.out.printf("Best population. Total population=%d, best members=%d, time=%d", POPULATION_SIZE,bestPopulation.getQuantityBestMembers(), duration);
 
+        ChartBuilder chartBuilder = new ChartBuilder();
+
+        chartBuilder.showScatterPlotChart(resumeTotalPopulation);
     }
 }
