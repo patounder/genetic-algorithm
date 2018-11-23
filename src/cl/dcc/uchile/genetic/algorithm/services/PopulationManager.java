@@ -41,7 +41,7 @@ public class PopulationManager {
             String randomNumLikeString = Integer.toBinaryString(randomNum);
             String finalSequence = normalizeSequence(randomNumLikeString, referenceSequenceLength);*/
 
-            String randomGeneratedSequence = generateRandomWordSequence(referenceSequenceLength);
+            String randomGeneratedSequence = generateRandomWordSequence(referenceSequenceLength, "");
             population.add(index, randomGeneratedSequence);
         }
 
@@ -164,9 +164,14 @@ public class PopulationManager {
     }
 
     //TODO this method must be abstract for all implementations or solutions using genetics algorithms
-    private String generateRandomWordSequence(int maxLength){
-        //TODO implement random word
-        return null;
+    private String generateRandomWordSequence(int maxLength, String initWord){
+        //ASCII 97 - 122
+        if(maxLength == 0){
+            return initWord;
+        } else {
+            char randomCharacter = (char) getRandomIntFromRange(97, 122);
+            return generateRandomWordSequence(maxLength - 1, initWord.concat(Character.toString(randomCharacter)));
+        }
     }
 
 }
