@@ -1,6 +1,6 @@
-package cl.dcc.uchile.genetic.algorithm.services.plot;
+package main.cl.dcc.uchile.genetic.algorithm.plot;
 
-import cl.dcc.uchile.genetic.algorithm.services.Population;
+import main.cl.dcc.uchile.genetic.algorithm.services.Population;
 
 import javax.swing.*;
 import java.util.List;
