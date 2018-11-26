@@ -29,7 +29,7 @@ public class ScatterPlotChart extends JFrame {
         DefaultCategoryDataset dataset = new DefaultCategoryDataset();
 
         for(int i = 0; i < generationList.size(); i++) {
-            dataset.addValue(generationList.get(i).getQuantityBestMembers(), "population", Integer.toString(i));
+            dataset.addValue(generationList.get(i).getBestMember().getFitness(), "population", Integer.toString(i));
         }
 
         return dataset;

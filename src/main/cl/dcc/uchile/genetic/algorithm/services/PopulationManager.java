@@ -3,7 +3,6 @@ package main.cl.dcc.uchile.genetic.algorithm.services;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
-import java.util.concurrent.atomic.AtomicReference;
 
 public class PopulationManager {
 
@@ -20,20 +19,17 @@ public class PopulationManager {
 
         List<String> sequenceList = makeGenesSequenceList(populationSize, referenceSequence.length());
 
-        AtomicReference<AtomicInteger> quantityBestMembers = new AtomicReference<>(new AtomicInteger());
         List<Member> populationList  = new ArrayList<>(sequenceList.size());
         Member bestMember = new Member();
         for(String sequence : sequenceList){
             int fitness = calcMemberFitness(sequence, referenceSequence);
-            quantityBestMembers.set(updateBestMembersQuantity(quantityBestMembers.get(), fitness));
-
             if(fitness >= bestMember.getFitness()){
                 bestMember = new Member(sequence, fitness);
             }
             populationList.add(new Member(sequence, fitness));
         }
 
-        return new Generation(populationList, quantityBestMembers.get().get(), bestMember);
+        return new Generation(populationList, bestMember);
     }
 
     public List<String> makeGenesSequenceList(int populationSize, int referenceSequenceLength) {
@@ -100,7 +96,6 @@ public class PopulationManager {
 
         List<Member> childList = new ArrayList<>(populationQuantity);
 
-        AtomicReference<AtomicInteger> quantityBestMembers = new AtomicReference<>(new AtomicInteger());
         Member bestMember = new Member();
         while(childList.size() < populationQuantity){
             int motherRandomIndex = getRandomIntFromRange(0, parents.size() - 1);
@@ -112,14 +107,12 @@ public class PopulationManager {
             child.setFitness(calcMemberFitness(child.getSequence(), referenceSequence));
             childList.add(child);
 
-            quantityBestMembers.set(updateBestMembersQuantity(quantityBestMembers.get(), child.getFitness()));
-
             if(child.getFitness() > bestMember.getFitness()){
                 bestMember = new Member(child.getSequence(), child.getFitness());
             }
         }
 
-        return new Generation(childList, quantityBestMembers.get().get(), bestMember);
+        return new Generation(childList, bestMember);
     }
 
 
