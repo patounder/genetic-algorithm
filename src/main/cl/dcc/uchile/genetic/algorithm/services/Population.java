@@ -6,14 +6,17 @@ public class Population {
 
     private List<Member> populationList;
     private int quantityBestMembers;
+    private int maxFitness;
+
 
     public Population() {
 
     }
 
-    public Population(List<Member> populationList, int quantityBestMembers) {
+    public Population(List<Member> populationList, int quantityBestMembers, int maxFitness) {
         this.populationList = populationList;
         this.quantityBestMembers = quantityBestMembers;
+        this.maxFitness = maxFitness;
     }
 
     public List<Member> getPopulationList() {
@@ -32,11 +35,20 @@ public class Population {
         this.quantityBestMembers = quantityBestMembers;
     }
 
+    public int getMaxFitness() {
+        return maxFitness;
+    }
+
+    public void setMaxFitness(int maxFitness) {
+        this.maxFitness = maxFitness;
+    }
+
     @Override
     public String toString() {
-        return "main.cl.dcc.uchile.genetic.algorithm.services.Population{" +
+        return "Population{" +
                 "populationList=" + populationList +
                 ", quantityBestMembers=" + quantityBestMembers +
+                ", maxFitness=" + maxFitness +
                 '}';
     }
 }

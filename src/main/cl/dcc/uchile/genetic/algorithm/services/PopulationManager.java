@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicReference;
-import java.util.stream.Collectors;
 
 public class PopulationManager {
 
@@ -22,15 +21,21 @@ public class PopulationManager {
         List<String> sequenceList = makeGenesSequenceList(populationSize, referenceSequence.length());
 
         AtomicReference<AtomicInteger> quantityBestMembers = new AtomicReference<>(new AtomicInteger());
-        List<Member> populationList = sequenceList.stream().map(sequence -> {
-            int fitness = calcMemberFitness(sequence, referenceSequence);
+        List<Member> populationList  = new ArrayList<>(sequenceList.size());
+        int maxFitness = 0;
 
+        for(String sequence : sequenceList){
+            int fitness = calcMemberFitness(sequence, referenceSequence);
             quantityBestMembers.set(updateBestMembersQuantity(quantityBestMembers.get(), fitness));
 
-            return new Member(sequence, fitness);
-        }).collect(Collectors.toList());
+            if(fitness > maxFitness){
+                maxFitness = fitness;
+            }
 
-        return new Population(populationList, quantityBestMembers.get().get());
+            populationList.add(new Member(sequence, fitness));
+        }
+
+        return new Population(populationList, quantityBestMembers.get().get(), maxFitness);
     }
 
     public List<String> makeGenesSequenceList(int populationSize, int referenceSequenceLength) {
@@ -98,7 +103,7 @@ public class PopulationManager {
         List<Member> childList = new ArrayList<>(populationQuantity);
 
         AtomicReference<AtomicInteger> quantityBestMembers = new AtomicReference<>(new AtomicInteger());
-
+        int maxFitness = 0;
         while(childList.size() < populationQuantity){
             int motherRandomIndex = getRandomIntFromRange(0, parents.size() - 1);
             Member mother = parents.get(motherRandomIndex);
@@ -110,9 +115,13 @@ public class PopulationManager {
             childList.add(child);
 
             quantityBestMembers.set(updateBestMembersQuantity(quantityBestMembers.get(), child.getFitness()));
+
+            if(child.getFitness() > maxFitness){
+                maxFitness = child.getFitness();
+            }
         }
 
-        return new Population(childList, quantityBestMembers.get().get());
+        return new Population(childList, quantityBestMembers.get().get(), maxFitness);
     }
 
 

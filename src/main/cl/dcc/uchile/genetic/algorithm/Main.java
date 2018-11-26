@@ -1,6 +1,5 @@
 package main.cl.dcc.uchile.genetic.algorithm;
 
-import main.cl.dcc.uchile.genetic.algorithm.plot.ChartBuilder;
 import main.cl.dcc.uchile.genetic.algorithm.services.Member;
 import main.cl.dcc.uchile.genetic.algorithm.services.Population;
 import main.cl.dcc.uchile.genetic.algorithm.services.PopulationManager;
@@ -13,34 +12,27 @@ public class Main {
     public static final int POPULATION_SIZE = 1000;
     public static final int QUANTITY_PARENTS = 500;
     public static final String REFERENCE_SEQUENCE = "hola";
-    public static final double MUTATION_RATE = 0.2;
+    public static final double MUTATION_RATE = 0.4;
 
     public static void main(String[] args) {
         PopulationManager populationManager = new PopulationManager();
 
-        List<Population> resumeTotalPopulation = new ArrayList<>();
-
         Population initPopulation = populationManager.makePopulation(POPULATION_SIZE, REFERENCE_SEQUENCE); //TODO change reference 'sequence' to generic reference
-        Population bestPopulation = initPopulation;
+        Population chosenPopulation = initPopulation;
+        List<Population> generations = new ArrayList<>();
+        generations.add(initPopulation);
 
-        long timeInit = System.currentTimeMillis();
-        int i = 1;
-        while(i <= 1000 || bestPopulation.getQuantityBestMembers() > 500){
-
-            List<Member> parents = populationManager.getParentsMemberList(bestPopulation.getPopulationList(), QUANTITY_PARENTS);
+        while(chosenPopulation.getQuantityBestMembers() < 1){
+            List<Member> parents = populationManager.getParentsMemberList(chosenPopulation.getPopulationList(), QUANTITY_PARENTS);
             Population newPopulation = populationManager.reproduction(parents, POPULATION_SIZE, MUTATION_RATE, REFERENCE_SEQUENCE);
 
-            if(bestPopulation.getQuantityBestMembers() < newPopulation.getQuantityBestMembers()){
-                bestPopulation = newPopulation;
+            if(newPopulation.getMaxFitness() > chosenPopulation.getMaxFitness()){
+                chosenPopulation = newPopulation;
             }
-            i++;
-            resumeTotalPopulation.add(newPopulation);
+            generations.add(newPopulation);
         }
-        long duration = System.currentTimeMillis() - timeInit;
-        System.out.printf("Best population. Total population=%d, best members=%d, time=%d", POPULATION_SIZE,bestPopulation.getQuantityBestMembers(), duration);
 
-        ChartBuilder chartBuilder = new ChartBuilder();
+        System.out.println(chosenPopulation);
 
-        chartBuilder.showScatterPlotChart(resumeTotalPopulation);
     }
 }
