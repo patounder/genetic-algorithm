@@ -10,32 +10,30 @@ public class PopulationManager {
 
     public static final int NUMBER_ATTEMPTS = 30;
     public static final int MOTHER_INDEX = 0;
-    public static final int MAX_FITNESS = 5;
+    public static final int MAX_FITNESS = 4;
     public static final int INITIAL_FITNESS = 0;
     public static final int INDEX_FIRST_CHAR_ASCII = 97;
     public static final int INDEX_LAST_CHAR_ASCII = 122;
     public static final String INIT_EMPTY_WORD = "";
 
-    public Population makePopulation(int populationSize, String referenceSequence) {
+    public Generation makeFirstGeneration(int populationSize, String referenceSequence) {
 
         List<String> sequenceList = makeGenesSequenceList(populationSize, referenceSequence.length());
 
         AtomicReference<AtomicInteger> quantityBestMembers = new AtomicReference<>(new AtomicInteger());
         List<Member> populationList  = new ArrayList<>(sequenceList.size());
-        int maxFitness = 0;
-
+        Member bestMember = new Member();
         for(String sequence : sequenceList){
             int fitness = calcMemberFitness(sequence, referenceSequence);
             quantityBestMembers.set(updateBestMembersQuantity(quantityBestMembers.get(), fitness));
 
-            if(fitness > maxFitness){
-                maxFitness = fitness;
+            if(fitness >= bestMember.getFitness()){
+                bestMember = new Member(sequence, fitness);
             }
-
             populationList.add(new Member(sequence, fitness));
         }
 
-        return new Population(populationList, quantityBestMembers.get().get(), maxFitness);
+        return new Generation(populationList, quantityBestMembers.get().get(), bestMember);
     }
 
     public List<String> makeGenesSequenceList(int populationSize, int referenceSequenceLength) {
@@ -98,12 +96,12 @@ public class PopulationManager {
         return (char) getRandomIntFromRange(INDEX_FIRST_CHAR_ASCII, INDEX_LAST_CHAR_ASCII);
     }
 
-    public Population reproduction(List<Member> parents, int populationQuantity, double mutationRate, String referenceSequence){
+    public Generation reproduction(List<Member> parents, int populationQuantity, double mutationRate, String referenceSequence){
 
         List<Member> childList = new ArrayList<>(populationQuantity);
 
         AtomicReference<AtomicInteger> quantityBestMembers = new AtomicReference<>(new AtomicInteger());
-        int maxFitness = 0;
+        Member bestMember = new Member();
         while(childList.size() < populationQuantity){
             int motherRandomIndex = getRandomIntFromRange(0, parents.size() - 1);
             Member mother = parents.get(motherRandomIndex);
@@ -116,12 +114,12 @@ public class PopulationManager {
 
             quantityBestMembers.set(updateBestMembersQuantity(quantityBestMembers.get(), child.getFitness()));
 
-            if(child.getFitness() > maxFitness){
-                maxFitness = child.getFitness();
+            if(child.getFitness() > bestMember.getFitness()){
+                bestMember = new Member(child.getSequence(), child.getFitness());
             }
         }
 
-        return new Population(childList, quantityBestMembers.get().get(), maxFitness);
+        return new Generation(childList, quantityBestMembers.get().get(), bestMember);
     }
 
 

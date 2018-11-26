@@ -1,7 +1,7 @@
 package main.cl.dcc.uchile.genetic.algorithm;
 
+import main.cl.dcc.uchile.genetic.algorithm.services.Generation;
 import main.cl.dcc.uchile.genetic.algorithm.services.Member;
-import main.cl.dcc.uchile.genetic.algorithm.services.Population;
 import main.cl.dcc.uchile.genetic.algorithm.services.PopulationManager;
 
 import java.util.ArrayList;
@@ -11,28 +11,31 @@ public class Main {
 
     public static final int POPULATION_SIZE = 1000;
     public static final int QUANTITY_PARENTS = 500;
-    public static final String REFERENCE_SEQUENCE = "hola";
+    public static final String REFERENCE_SEQUENCE = "casa";
     public static final double MUTATION_RATE = 0.4;
 
     public static void main(String[] args) {
         PopulationManager populationManager = new PopulationManager();
 
-        Population initPopulation = populationManager.makePopulation(POPULATION_SIZE, REFERENCE_SEQUENCE); //TODO change reference 'sequence' to generic reference
-        Population chosenPopulation = initPopulation;
-        List<Population> generations = new ArrayList<>();
-        generations.add(initPopulation);
+        Generation firstGeneration = populationManager.makeFirstGeneration(POPULATION_SIZE, REFERENCE_SEQUENCE); //TODO change reference 'sequence' to generic reference
+        Generation chosenGenration = firstGeneration;
+        List<Generation> generationList = new ArrayList<>();
+        generationList.add(firstGeneration);
 
-        while(chosenPopulation.getQuantityBestMembers() < 1){
-            List<Member> parents = populationManager.getParentsMemberList(chosenPopulation.getPopulationList(), QUANTITY_PARENTS);
-            Population newPopulation = populationManager.reproduction(parents, POPULATION_SIZE, MUTATION_RATE, REFERENCE_SEQUENCE);
 
-            if(newPopulation.getMaxFitness() > chosenPopulation.getMaxFitness()){
-                chosenPopulation = newPopulation;
+        int index = 0;
+        do {
+            List<Member> parents = populationManager.getParentsMemberList(chosenGenration.getPopulationList(), QUANTITY_PARENTS);
+            Generation newGeneration = populationManager.reproduction(parents, POPULATION_SIZE, MUTATION_RATE, REFERENCE_SEQUENCE);
+
+            if(newGeneration.getBestMember().getFitness() > chosenGenration.getBestMember().getFitness()){
+                chosenGenration = newGeneration;
             }
-            generations.add(newPopulation);
-        }
 
-        System.out.println(chosenPopulation);
+            generationList.add(newGeneration);
+            index++;
+        } while(chosenGenration.getQuantityBestMembers() < 1 && index < 1000);
 
+        System.out.println(chosenGenration.getBestMember());
     }
 }

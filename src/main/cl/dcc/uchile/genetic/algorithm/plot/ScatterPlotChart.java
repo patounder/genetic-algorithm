@@ -1,6 +1,6 @@
 package main.cl.dcc.uchile.genetic.algorithm.plot;
 
-import main.cl.dcc.uchile.genetic.algorithm.services.Population;
+import main.cl.dcc.uchile.genetic.algorithm.services.Generation;
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
@@ -11,11 +11,11 @@ import java.util.List;
 
 public class ScatterPlotChart extends JFrame {
 
-    public ScatterPlotChart(String title, List<Population> populationList) {
+    public ScatterPlotChart(String title, List<Generation> generationList) {
         super(title);
 
         // Create dataset
-        DefaultCategoryDataset dataset = createDataset(populationList);
+        DefaultCategoryDataset dataset = createDataset(generationList);
 
         // Create chart
         JFreeChart chart = ChartFactory.createLineChart("Numero de Poblacion v/s Cantidad de Mejores Miembros","Numero de Poblacion","Cantidad de Mejores Miembros", dataset);
@@ -25,11 +25,11 @@ public class ScatterPlotChart extends JFrame {
         setContentPane(panel);
     }
 
-    private DefaultCategoryDataset createDataset(List<Population> populationList) {
+    private DefaultCategoryDataset createDataset(List<Generation> generationList) {
         DefaultCategoryDataset dataset = new DefaultCategoryDataset();
 
-        for(int i = 0; i < populationList.size(); i++) {
-            dataset.addValue(populationList.get(i).getQuantityBestMembers(), "population", Integer.toString(i));
+        for(int i = 0; i < generationList.size(); i++) {
+            dataset.addValue(generationList.get(i).getQuantityBestMembers(), "population", Integer.toString(i));
         }
 
         return dataset;

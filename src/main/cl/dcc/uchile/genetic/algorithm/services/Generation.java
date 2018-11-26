@@ -2,21 +2,21 @@ package main.cl.dcc.uchile.genetic.algorithm.services;
 
 import java.util.List;
 
-public class Population {
+public class Generation {
 
     private List<Member> populationList;
     private int quantityBestMembers;
-    private int maxFitness;
+    private Member bestMember;
 
 
-    public Population() {
+    public Generation() {
 
     }
 
-    public Population(List<Member> populationList, int quantityBestMembers, int maxFitness) {
+    public Generation(List<Member> populationList, int quantityBestMembers, Member bestMember) {
         this.populationList = populationList;
         this.quantityBestMembers = quantityBestMembers;
-        this.maxFitness = maxFitness;
+        this.bestMember = bestMember;
     }
 
     public List<Member> getPopulationList() {
@@ -35,20 +35,20 @@ public class Population {
         this.quantityBestMembers = quantityBestMembers;
     }
 
-    public int getMaxFitness() {
-        return maxFitness;
+    public Member getBestMember() {
+        return bestMember;
     }
 
-    public void setMaxFitness(int maxFitness) {
-        this.maxFitness = maxFitness;
+    public void setBestMember(Member bestMember) {
+        this.bestMember = bestMember;
     }
 
     @Override
     public String toString() {
-        return "Population{" +
+        return "Generation{" +
                 "populationList=" + populationList +
                 ", quantityBestMembers=" + quantityBestMembers +
-                ", maxFitness=" + maxFitness +
+                ", bestMember=" + bestMember +
                 '}';
     }
 }
