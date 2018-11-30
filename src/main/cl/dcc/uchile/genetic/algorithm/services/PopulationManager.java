@@ -6,8 +6,6 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 public class PopulationManager {
 
-
-    public static final int NUMBER_ATTEMPTS = 30;
     public static final int MOTHER_INDEX = 0;
     public static final int MAX_FITNESS = 4;
     public static final int INITIAL_FITNESS = 0;
@@ -15,12 +13,13 @@ public class PopulationManager {
     public static final int INDEX_LAST_CHAR_ASCII = 122;
     public static final String INIT_EMPTY_WORD = "";
 
-    public Generation makeFirstGeneration(int populationSize, String referenceSequence) {
+    //TODO crear una generacion con la lista de los posibles soluciones (lista diagonales). Random. Tamaño es parametro
+    public Generation makeFirstGeneration(int populationSize, int matrixLength) {
 
-        List<String> sequenceList = makeGenesSequenceList(populationSize, referenceSequence.length());
+        //List<String> sequenceList = makeGenesSequenceList(populationSize, referenceSequence.length());
 
-        List<Member> populationList  = new ArrayList<>(sequenceList.size());
         Member bestMember = new Member();
+        /*List<Member> populationList  = new ArrayList<>(sequenceList.size());
         for(String sequence : sequenceList){
             int fitness = calcMemberFitness(sequence, referenceSequence);
             if(fitness >= bestMember.getFitness()){
@@ -30,6 +29,9 @@ public class PopulationManager {
         }
 
         return new Generation(populationList, bestMember);
+        */
+
+        return null;
     }
 
     public List<String> makeGenesSequenceList(int populationSize, int referenceSequenceLength) {
