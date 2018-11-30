@@ -1,10 +1,7 @@
-package cl.dcc.uchile.genetic.algorithm.services;
+package main.cl.dcc.uchile.genetic.algorithm.services;
 
 public class Member implements MemberBehaviour {
 
-    public static final char ZERO_VALUE_GENE = '0';
-    public static final char ONE_VALUE_GENE = '1';
-    public static final int SEQUENCE_SIZE = 5;
     private String sequence; //TODO change name to generic value o purpose
     private int fitness;
 
@@ -35,33 +32,24 @@ public class Member implements MemberBehaviour {
 
     @Override
     public String toString() {
-        return "cl.dcc.uchile.genetic.algorithm.services.Member{" +
+        return "main.cl.dcc.uchile.genetic.algorithm.services.Member{" +
                 "sequence='" + sequence + '\'' +
                 ", fitness=" + fitness +
                 '}';
     }
 
     @Override
-    public void mutation(double mutationRate) {
+    public void mutation(double mutationRate, String referenceSequence) {
 
-        int genesQuantityToMutate = (int) (SEQUENCE_SIZE * mutationRate);
+        int genesQuantityToMutate = (int) (referenceSequence.length() * mutationRate);
         char[] sequenceArray = this.sequence.toCharArray();
+
         for(int i = 0; i < genesQuantityToMutate; i++){
-            int indexSequenceToMutate = PopulationManager.getRandomIntFromRange(0, 4);
-            char gene = sequenceArray[indexSequenceToMutate];
-            char newGene = geneSwap(gene);
+            int indexSequenceToMutate = PopulationManager.getRandomIntFromRange(0, referenceSequence.length() - 1);
+            char newGene = PopulationManager.getRandomChar();
             sequenceArray[indexSequenceToMutate] = newGene;
         }
 
         this.sequence = new String(sequenceArray);
-    }
-
-    private char geneSwap(char gene){
-
-        if(gene == ZERO_VALUE_GENE){
-            return ONE_VALUE_GENE;
-        }
-
-        return ZERO_VALUE_GENE;
     }
 }
