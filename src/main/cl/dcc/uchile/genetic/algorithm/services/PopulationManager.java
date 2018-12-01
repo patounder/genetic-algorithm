@@ -25,7 +25,7 @@ public class PopulationManager {
         Member bestMember = new Member();
         for(String sequence : sequenceList){
             int fitness = calcMemberFitness(sequence);
-            if(fitness >= bestMember.getFitness()){
+            if(fitness <= bestMember.getFitness()){
                 bestMember = new Member(sequence, fitness);
             }
             populationList.add(new Member(sequence, fitness));
