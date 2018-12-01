@@ -98,7 +98,7 @@ public class PopulationManager {
         for(int i = 0; i <= numberAttempts; i++){
             Member member = population.get(getRandomIntFromRange(population.size() - 1, 0));
 
-            if(null == best || member.getFitness() > best.getFitness()){
+            if(null == best || member.getFitness() <= best.getFitness()){
                 best = member;
             }
         }
@@ -114,7 +114,7 @@ public class PopulationManager {
         return (char) getRandomIntFromRange(INDEX_FIRST_CHAR_ASCII, INDEX_LAST_CHAR_ASCII);
     }
 
-    public Generation reproduction(List<Member> parents, int populationQuantity, double mutationRate, String referenceSequence){
+    public Generation reproduction(List<Member> parents, int populationQuantity, double mutationRate, int referenceLength){
 
         List<Member> childList = new ArrayList<>(populationQuantity);
 
@@ -122,10 +122,10 @@ public class PopulationManager {
         while(childList.size() < populationQuantity){
             int motherRandomIndex = getRandomIntFromRange(0, parents.size() - 1);
             Member mother = parents.get(motherRandomIndex);
-            int fatherRandomIndex = getRandomIntFromRange(0, parents.size() - 1); //TODO possible error to select the gen like mother and father to same time
+            int fatherRandomIndex = getRandomIntFromRange(0, parents.size() - 1); //TODO change possible error to select the gen like mother and father to same time
             Member father = parents.get(fatherRandomIndex);
             Member child = makeChild(mother, father);
-            child.mutation(mutationRate, referenceSequence);
+            child.mutation(mutationRate, referenceLength);
             child.setFitness(calcMemberFitness(child.getSequence()));
             childList.add(child);
 

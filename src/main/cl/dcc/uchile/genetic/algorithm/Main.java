@@ -27,7 +27,7 @@ public class Main {
         int index = 0;
         do {
             List<Member> parents = populationManager.getParentsMemberList(chosenGeneration.getPopulationList(), QUANTITY_PARENTS, NUMBER_ATTEMPTS);
-            Generation newGeneration = populationManager.reproduction(parents, POPULATION_SIZE, MUTATION_RATE, REFERENCE_SEQUENCE);
+            Generation newGeneration = populationManager.reproduction(parents, POPULATION_SIZE, MUTATION_RATE, MATRIX_LENGTH);
 
             if(newGeneration.getBestMember().getFitness() > chosenGeneration.getBestMember().getFitness()){
                 chosenGeneration = newGeneration;

@@ -39,13 +39,14 @@ public class Member implements MemberBehaviour {
     }
 
     @Override
-    public void mutation(double mutationRate, String referenceSequence) {
+    public void mutation(double mutationRate, int referenceLength) {
 
-        int genesQuantityToMutate = (int) (referenceSequence.length() * mutationRate);
+        int genesQuantityToMutate = (int) (referenceLength * mutationRate);
         char[] sequenceArray = this.sequence.toCharArray();
+        int maxIndexAvalaible = referenceLength - 1;
 
         for(int i = 0; i < genesQuantityToMutate; i++){
-            int indexSequenceToMutate = PopulationManager.getRandomIntFromRange(0, referenceSequence.length() - 1);
+            int indexSequenceToMutate = PopulationManager.getRandomIntFromRange(0, maxIndexAvalaible);
             char newGene = PopulationManager.getRandomChar();
             sequenceArray[indexSequenceToMutate] = newGene;
         }
