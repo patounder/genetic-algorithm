@@ -4,7 +4,6 @@ import main.cl.dcc.uchile.genetic.algorithm.dto.Pair;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.atomic.AtomicInteger;
 
 public class PopulationManager {
 
@@ -25,7 +24,7 @@ public class PopulationManager {
         Member bestMember = new Member();
         for(String sequence : sequenceList){
             int fitness = calcMemberFitness(sequence);
-            if(fitness <= bestMember.getFitness()){
+            if(fitness < bestMember.getFitness()){
                 bestMember = new Member(sequence, fitness);
             }
             populationList.add(new Member(sequence, fitness));
@@ -95,10 +94,10 @@ public class PopulationManager {
     public Member tournamentSelection(List<Member> population, int numberAttempts) {
 
         Member best = null;
-        for(int i = 0; i <= numberAttempts; i++){
+        for(int i = 0; i < numberAttempts; i++){
             Member member = population.get(getRandomIntFromRange(population.size() - 1, 0));
 
-            if(null == best || member.getFitness() <= best.getFitness()){
+            if(null == best || member.getFitness() < best.getFitness()){
                 best = member;
             }
         }
@@ -120,16 +119,19 @@ public class PopulationManager {
 
         Member bestMember = new Member();
         while(childList.size() < populationQuantity){
+
             int motherRandomIndex = getRandomIntFromRange(0, parents.size() - 1);
             Member mother = parents.get(motherRandomIndex);
+
             int fatherRandomIndex = getRandomIntFromRange(0, parents.size() - 1); //TODO change possible error to select the gen like mother and father to same time
             Member father = parents.get(fatherRandomIndex);
+
             Member child = makeChild(mother, father);
             child.mutation(mutationRate, referenceLength);
             child.setFitness(calcMemberFitness(child.getSequence()));
             childList.add(child);
 
-            if(child.getFitness() > bestMember.getFitness()){
+            if(child.getFitness() < bestMember.getFitness()){
                 bestMember = new Member(child.getSequence(), child.getFitness());
             }
         }
@@ -165,15 +167,6 @@ public class PopulationManager {
             return motherGene;
         }
         return fatherGene;
-    }
-
-    private AtomicInteger updateBestMembersQuantity(AtomicInteger bestMembersQuantity, int fitnessMember){
-
-        if(fitnessMember == MAX_FITNESS){ //TODO parametrizar criterio de mejores miembros
-            return new AtomicInteger(bestMembersQuantity.get() + 1);
-        }
-
-        return bestMembersQuantity;
     }
 
     //TODO this method must be abstract for all implementations or solutions using genetics algorithms
