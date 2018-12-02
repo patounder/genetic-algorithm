@@ -43,11 +43,11 @@ public class Member implements MemberBehaviour {
 
         int genesQuantityToMutate = (int) (referenceLength * mutationRate);
         char[] sequenceArray = this.sequence.toCharArray();
-        int maxIndexAvalaible = referenceLength - 1;
+        int maxIndexAvailable = referenceLength - 1;
 
         for(int i = 0; i < genesQuantityToMutate; i++){
-            int indexSequenceToMutate = PopulationManager.getRandomIntFromRange(0, maxIndexAvalaible);
-            char newGene = PopulationManager.getRandomChar();
+            int indexSequenceToMutate = PopulationManager.getRandomIntFromRange(0, maxIndexAvailable);
+            char newGene = PopulationManager.getRandomIndex(0, maxIndexAvailable);
             sequenceArray[indexSequenceToMutate] = newGene;
         }
 

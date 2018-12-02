@@ -8,11 +8,11 @@ import java.util.List;
 public class PopulationManager {
 
     public static final int MOTHER_INDEX = 0;
-    public static final int INITIAL_FITNESS = 0;
     public static final int INDEX_FIRST_CHAR_ASCII = 97;
     public static final int INDEX_LAST_CHAR_ASCII = 122;
     public static final String INIT_EMPTY_WORD = "";
     public static final int REDIX = 10;
+    public static final int INITIAL_FOO_FITNESS = 10000;
 
     //TODO crear una generacion con la lista de los posibles soluciones (lista diagonales). Random. Tamaño es parametro
     public Generation makeFirstGeneration(int populationSize, int matrixLength) {
@@ -20,7 +20,7 @@ public class PopulationManager {
         List<String> sequenceList = makeGenesSequenceList(populationSize, matrixLength);
 
         List<Member> populationList  = new ArrayList<>(sequenceList.size());
-        Member bestMember = new Member();
+        Member bestMember = new Member(null, INITIAL_FOO_FITNESS);
         for(String sequence : sequenceList){
             int fitness = calcMemberFitness(sequence);
             if(fitness < bestMember.getFitness()){
@@ -53,8 +53,6 @@ public class PopulationManager {
 
         int fitness = calcDiagonalSum(queensPositionsList) + calcHorizontalSum(queensPositionsList)
                 + calcVerticalSum(queensPositionsList);
-        //TODO param calcs methos with funcion parameter: logic abstract
-        //TODO remember target fitness must be close to zero
         return fitness;
     }
 
@@ -68,7 +66,6 @@ public class PopulationManager {
     }
 
     private int calcDiagonalSum(List<Pair> queensPositionsList){
-        //TODO implement filter for 'hint' algorithm
         int queensQuantity = 0;
 
         for(int pivotIndex = 0; pivotIndex < queensPositionsList.size(); pivotIndex++){
@@ -88,13 +85,35 @@ public class PopulationManager {
     }
 
     private int calcVerticalSum(List<Pair> queensPositionsList){
-        //TODO implement filter search queen in same row
-        return 0;
+        int queensQuantity = 0;
+
+        for(int pivotIndex = 0; pivotIndex < queensPositionsList.size(); pivotIndex++){
+            for(int iterativeIndex = pivotIndex + 1; iterativeIndex < queensPositionsList.size(); iterativeIndex++){
+                Pair pivotQueenPosition = queensPositionsList.get(pivotIndex);
+                Pair iterativeQueenPosition = queensPositionsList.get(iterativeIndex);
+
+                if(pivotQueenPosition.getFirst() == iterativeQueenPosition.getFirst()){
+                    queensQuantity = queensQuantity + 1;
+                }
+            }
+        }
+        return queensQuantity;
     }
 
     private int calcHorizontalSum(List<Pair> queensPositionsList){
-        //TODO implement filter search queen in same col
-        return 0;
+        int queensQuantity = 0;
+
+        for(int pivotIndex = 0; pivotIndex < queensPositionsList.size(); pivotIndex++){
+            for(int iterativeIndex = pivotIndex + 1; iterativeIndex < queensPositionsList.size(); iterativeIndex++){
+                Pair pivotQueenPosition = queensPositionsList.get(pivotIndex);
+                Pair iterativeQueenPosition = queensPositionsList.get(iterativeIndex);
+
+                if(pivotQueenPosition.getSecond() == iterativeQueenPosition.getSecond()){
+                    queensQuantity = queensQuantity + 1;
+                }
+            }
+        }
+        return queensQuantity;
     }
 
     public List<Member> getParentsMemberList(List<Member> population, int quantityParents, int numberAttempts){
@@ -135,7 +154,7 @@ public class PopulationManager {
 
         List<Member> childList = new ArrayList<>(populationQuantity);
 
-        Member bestMember = new Member();
+        Member bestMember = new Member(null, INITIAL_FOO_FITNESS);
         while(childList.size() < populationQuantity){
 
             int motherRandomIndex = getRandomIntFromRange(0, parents.size() - 1);
@@ -175,7 +194,7 @@ public class PopulationManager {
         }
 
         String childSequence = new String(childGenes);
-        return new Member(childSequence, INITIAL_FITNESS);
+        return new Member(childSequence, INITIAL_FOO_FITNESS);
     }
 
     private char selectGeneBetweenMotherAndFather(char motherGene, char fatherGene){
@@ -198,7 +217,7 @@ public class PopulationManager {
         }
     }
 
-    private char getRandomIndex(int from, int to){
+    public static char getRandomIndex(int from, int to){
 
         int randomNum = getRandomIntFromRange(from, to);
         char randomNumLikeChar = Character.forDigit(randomNum, REDIX);
