@@ -8,7 +8,6 @@ import java.util.List;
 public class PopulationManager {
 
     public static final int MOTHER_INDEX = 0;
-    public static final int MAX_FITNESS = 4;
     public static final int INITIAL_FITNESS = 0;
     public static final int INDEX_FIRST_CHAR_ASCII = 97;
     public static final int INDEX_LAST_CHAR_ASCII = 122;
@@ -60,13 +59,32 @@ public class PopulationManager {
     }
 
     private List<Pair> getQueensPositionsList(char[] referenceSequenceArray){
-        //TODO implemnt algoritmo de generacion de posiciones en la matriz (comentarios de telegram)
-        return null;
+
+        List<Pair> queensPositionsLists = new ArrayList<>();
+        for(int i = 0; i < referenceSequenceArray.length; i++){
+            queensPositionsLists.add(i, new Pair(i, referenceSequenceArray[i]));
+        }
+        return queensPositionsLists;
     }
 
     private int calcDiagonalSum(List<Pair> queensPositionsList){
         //TODO implement filter for 'hint' algorithm
-        return 0;
+        int queensQuantity = 0;
+
+        for(int pivotIndex = 0; pivotIndex < queensPositionsList.size(); pivotIndex++){
+            for(int iterativeIndex = pivotIndex + 1; iterativeIndex < queensPositionsList.size(); iterativeIndex++){
+                Pair pivotQueenPosition = queensPositionsList.get(pivotIndex);
+                Pair iterativeQueenPosition = queensPositionsList.get(iterativeIndex);
+
+                int distanceInList = iterativeIndex - pivotIndex;
+                int differenceAmongThem = pivotQueenPosition.getSecond() - iterativeQueenPosition.getSecond();
+
+                if(distanceInList == Math.abs(differenceAmongThem)){
+                    queensQuantity = queensQuantity + 1;
+                }
+            }
+        }
+        return queensQuantity;
     }
 
     private int calcVerticalSum(List<Pair> queensPositionsList){
