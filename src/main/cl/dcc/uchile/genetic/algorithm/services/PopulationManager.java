@@ -116,22 +116,22 @@ public class PopulationManager {
         return queensQuantity;
     }
 
-    public List<Member> getParentsMemberList(List<Member> population, int quantityParents, int numberAttempts){
+    public List<Member> getParentsMemberList(List<Member> population, int quantityParents, int tournamentSelectionNumberAttempts){
 
         List<Member> selectedParentList = new ArrayList<>(quantityParents);
 
         for(int i = 0; i < quantityParents; i++){
-            Member selectedParent = tournamentSelection(population, numberAttempts);
+            Member selectedParent = tournamentSelection(population, tournamentSelectionNumberAttempts);
             selectedParentList.add(selectedParent);
         }
 
         return selectedParentList;
     }
 
-    public Member tournamentSelection(List<Member> population, int numberAttempts) {
+    public Member tournamentSelection(List<Member> population, int tournamentSelectionNumberAttempts) {
 
         Member best = null;
-        for(int i = 0; i < numberAttempts; i++){
+        for(int i = 0; i < tournamentSelectionNumberAttempts; i++){
             Member member = population.get(getRandomIntFromRange(population.size() - 1, 0));
 
             if(null == best || member.getFitness() < best.getFitness()){
