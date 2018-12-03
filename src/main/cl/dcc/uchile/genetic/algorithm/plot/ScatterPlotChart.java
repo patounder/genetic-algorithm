@@ -11,27 +11,29 @@ import java.util.List;
 
 public class ScatterPlotChart extends JFrame {
 
-    public ScatterPlotChart(String title, List<Generation> generationList) {
+    public ScatterPlotChart(String title, List<Generation> generationsList) {
         super(title);
 
-        // Create dataset
-        DefaultCategoryDataset dataset = createDataset(generationList);
+        DefaultCategoryDataset dataset = createDataset(generationsList);
 
-        // Create chart
-        JFreeChart chart = ChartFactory.createLineChart("Numero de Poblacion v/s Cantidad de Mejores Miembros","Numero de Poblacion","Cantidad de Mejores Miembros", dataset);
+        String categoryAxisLabel = "generation number";
+        String valueAxisLabel = "generation's best fitness";
+        JFreeChart chart = ChartFactory.createLineChart(title,
+                categoryAxisLabel, valueAxisLabel, dataset);
 
-        // Create Panel
         ChartPanel panel = new ChartPanel(chart);
         setContentPane(panel);
     }
 
-    private DefaultCategoryDataset createDataset(List<Generation> generationList) {
+    private DefaultCategoryDataset createDataset(List<Generation> generationsList) {
         DefaultCategoryDataset dataset = new DefaultCategoryDataset();
+        String bestGenerationKey = "generations";
 
-        for(int i = 0; i < generationList.size(); i++) {
-            dataset.addValue(generationList.get(i).getBestMember().getFitness(), "population", Integer.toString(i));
+
+        for(int index = 0; index < generationsList.size(); index++) {
+            dataset.addValue(generationsList.get(index).getBestMember().getFitness(), bestGenerationKey,
+                    Integer.toString(index));
         }
-
         return dataset;
     }
 }

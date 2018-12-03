@@ -1,24 +1,26 @@
 package main.cl.dcc.uchile.genetic.algorithm.services;
 
+import java.util.List;
+
 public class Member implements MemberBehaviour {
 
-    private String sequence; //TODO change name to generic value o purpose
+    private List<Integer> sequence;
     private int fitness;
 
     public Member() {
         super();
     }
 
-    public Member(String sequence, int fitness) {
+    public Member(List<Integer> sequence, int fitness) {
         this.sequence = sequence;
         this.fitness = fitness;
     }
 
-    public String getSequence() {
+    public List<Integer> getSequence() {
         return sequence;
     }
 
-    public void setSequence(String sequence) {
+    public void setSequence(List<Integer> sequence) {
         this.sequence = sequence;
     }
 
@@ -42,15 +44,12 @@ public class Member implements MemberBehaviour {
     public void mutation(double mutationRate, int referenceLength) {
 
         int genesQuantityToMutate = (int) (referenceLength * mutationRate);
-        char[] sequenceArray = this.sequence.toCharArray();
         int maxIndexAvailable = referenceLength - 1;
 
         for(int i = 0; i < genesQuantityToMutate; i++){
             int indexSequenceToMutate = PopulationManager.getRandomIntFromRange(0, maxIndexAvailable);
-            char newGene = PopulationManager.getRandomIndex(0, maxIndexAvailable);
-            sequenceArray[indexSequenceToMutate] = newGene;
+            int newGene = PopulationManager.getRandomIntFromRange(0, maxIndexAvailable);
+            sequence.set(indexSequenceToMutate, newGene);
         }
-
-        this.sequence = new String(sequenceArray);
     }
 }

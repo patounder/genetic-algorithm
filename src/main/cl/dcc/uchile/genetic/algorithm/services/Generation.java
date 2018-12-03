@@ -6,7 +6,7 @@ public class Generation {
 
     private List<Member> populationList;
     private Member bestMember;
-
+    private int generationIndex;
 
     public Generation() {
 
@@ -31,6 +31,14 @@ public class Generation {
 
     public void setBestMember(Member bestMember) {
         this.bestMember = bestMember;
+    }
+
+    public int getGenerationIndex() {
+        return generationIndex;
+    }
+
+    public void setGenerationIndex(int generationIndex) {
+        this.generationIndex = generationIndex;
     }
 
     @Override

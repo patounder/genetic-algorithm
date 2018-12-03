@@ -10,18 +10,16 @@ public class PopulationManager {
     public static final int MOTHER_INDEX = 0;
     public static final int INDEX_FIRST_CHAR_ASCII = 97;
     public static final int INDEX_LAST_CHAR_ASCII = 122;
-    public static final String INIT_EMPTY_WORD = "";
-    public static final int REDIX = 10;
     public static final int INITIAL_FOO_FITNESS = 10000;
 
     //TODO crear una generacion con la lista de los posibles soluciones (lista diagonales). Random. Tamaño es parametro
     public Generation makeFirstGeneration(int populationSize, int matrixLength) {
 
-        List<String> sequenceList = makeGenesSequenceList(populationSize, matrixLength);
+        List<List<Integer>> sequenceList = makeGenesSequenceList(populationSize, matrixLength);
 
         List<Member> populationList  = new ArrayList<>(sequenceList.size());
         Member bestMember = new Member(null, INITIAL_FOO_FITNESS);
-        for(String sequence : sequenceList){
+        for(List<Integer> sequence : sequenceList){
             int fitness = calcMemberFitness(sequence);
             if(fitness < bestMember.getFitness()){
                 bestMember = new Member(sequence, fitness);
@@ -32,35 +30,32 @@ public class PopulationManager {
         return new Generation(populationList, bestMember);
     }
 
-    public List<String> makeGenesSequenceList(int populationSize, int matrixLength) {
+    public List<List<Integer>> makeGenesSequenceList(int populationSize, int matrixLength) {
 
-        List<String> population = new ArrayList<>(populationSize);
+        List<List<Integer>> population = new ArrayList<>(populationSize);
         int matrixMaxIndex = matrixLength - 1;
         for (int index = 0; index < populationSize; index++) {
-            String randomGeneratedSequence = generateRandomWordSequence(matrixLength, INIT_EMPTY_WORD, matrixMaxIndex);
+            List<Integer> randomGeneratedSequence = generateRandomSequence(matrixLength, matrixMaxIndex);
             population.add(index, randomGeneratedSequence);
         }
-
         return population;
     }
 
 
-    public int calcMemberFitness(String referenceSequence) {
+    public int calcMemberFitness(List<Integer> referenceSequence) {
 
-
-        char[] referenceSequenceArray = referenceSequence.toCharArray();
-        List<Pair> queensPositionsList = getQueensPositionsList(referenceSequenceArray);
+        List<Pair> queensPositionsList = getQueensPositionsList(referenceSequence);
 
         int fitness = calcDiagonalSum(queensPositionsList) + calcHorizontalSum(queensPositionsList)
                 + calcVerticalSum(queensPositionsList);
         return fitness;
     }
 
-    private List<Pair> getQueensPositionsList(char[] referenceSequenceArray){
+    private List<Pair> getQueensPositionsList(List<Integer> referenceSequenceArray){
 
         List<Pair> queensPositionsLists = new ArrayList<>();
-        for(int i = 0; i < referenceSequenceArray.length; i++){
-            queensPositionsLists.add(i, new Pair(i, referenceSequenceArray[i]));
+        for(int index = 0; index < referenceSequenceArray.size(); index++){
+            queensPositionsLists.add(index, new Pair(index, referenceSequenceArray.get(index)));
         }
         return queensPositionsLists;
     }
@@ -179,25 +174,22 @@ public class PopulationManager {
 
     private Member makeChild(Member mother, Member father){
 
-        char[] motherGenes = mother.getSequence().toCharArray();//TODO analyze option for strings like generic object
-        char[] fatherGenes = father.getSequence().toCharArray();
-
-        if(motherGenes.length != fatherGenes.length){
+        int motherSequenceSize = mother.getSequence().size();
+        int fatherSequenceSize = father.getSequence().size();
+        if( motherSequenceSize != fatherSequenceSize){
             System.out.println("mother's genes and father's genes has not same length");
             return null;
         }
 
-        char[] childGenes = new char[motherGenes.length];
-        for(int i = 0 ; i < motherGenes.length; i++){
-            char createdGene = selectGeneBetweenMotherAndFather(motherGenes[i], fatherGenes[i]);
-            childGenes[i] = createdGene;
+        List<Integer> childGenes = new ArrayList<>(motherSequenceSize);
+        for(int index = 0 ; index < motherSequenceSize; index++){
+            int createdGene = selectGeneBetweenMotherAndFather(mother.getSequence().get(index), father.getSequence().get(index));
+            childGenes.add(index, createdGene);
         }
-
-        String childSequence = new String(childGenes);
-        return new Member(childSequence, INITIAL_FOO_FITNESS);
+        return new Member(childGenes, INITIAL_FOO_FITNESS);
     }
 
-    private char selectGeneBetweenMotherAndFather(char motherGene, char fatherGene){
+    private int selectGeneBetweenMotherAndFather(int motherGene, int fatherGene){
         int selectedParentIndex = getRandomIntFromRange(0, 1);
 
         if(selectedParentIndex == MOTHER_INDEX){
@@ -207,21 +199,15 @@ public class PopulationManager {
     }
 
     //TODO this method must be abstract for all implementations or solutions using genetics algorithms
-    private String generateRandomWordSequence(int maxLength, String initWord, int matrixMaxIndex){
+    private List<Integer> generateRandomSequence(int maxLength, int matrixMaxIndex){
 
-        if(maxLength == 0){
-            return initWord;
-        } else {
-            char randomCharacter = getRandomIndex(0, matrixMaxIndex);
-            return generateRandomWordSequence(maxLength - 1, initWord.concat(Character.toString(randomCharacter)), matrixMaxIndex);
+        List<Integer> generatedSequence = new ArrayList<>(matrixMaxIndex);
+
+        for(int index = 0; index < maxLength; index++){
+            int randomQueenPosition = getRandomIntFromRange(0, matrixMaxIndex);
+            generatedSequence.add(index, randomQueenPosition);
         }
+
+        return generatedSequence;
     }
-
-    public static char getRandomIndex(int from, int to){
-
-        int randomNum = getRandomIntFromRange(from, to);
-        char randomNumLikeChar = Character.forDigit(randomNum, REDIX);
-        return randomNumLikeChar;
-    }
-
 }
